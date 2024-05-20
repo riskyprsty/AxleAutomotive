@@ -31,7 +31,7 @@ SpeedometerView Speed;
         Speed.addColoredRange(0, 50, Color.GREEN);
         Speed.addColoredRange(50, 75, Color.YELLOW);
         Speed.addColoredRange(75, 100, Color.RED);
-        Speed.setSpeed(25, 2000, 500);
+        Speed.setSpeed(75, 5000, 500);
     }
 
 }
