@@ -40,25 +40,25 @@ public class MainActivity extends AppCompatActivity {
         Speed.setSpeed(75, 5000, 500);
 
         // Initialize BottomNavigationView
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    loadFragment(new HomeFragment());
-                    return true;
-                case R.id.navigation_settings:
-                    loadFragment(new SettingsFragment());
-                    return true;
-                case R.id.navigation_profile:
-                    loadFragment(new ProfileFragment());
-                    return true;
-                case R.id.navigation_message:
-                    loadFragment(new MessageFragment());
-                    return true;
-            }
-            return false;
-        });
+//        bottomNavigationView = findViewById(R.id.bottom_navigation);
+//        bottomNavigationView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
+//        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+//            switch (item.getItemId()) {
+//                case R.id.navigation_home:
+//                    loadFragment(new HomeFragment());
+//                    return true;
+//                case R.id.navigation_settings:
+//                    loadFragment(new SettingsFragment());
+//                    return true;
+//                case R.id.navigation_profile:
+//                    loadFragment(new ProfileFragment());
+//                    return true;
+//                case R.id.navigation_message:
+//                    loadFragment(new MessageFragment());
+//                    return true;
+//            }
+//            return false;
+//        });
 
         // Load the default fragment
         if (savedInstanceState == null) {
