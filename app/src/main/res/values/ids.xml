@@ -6,4 +6,5 @@
     <item name="imageView3" type="id" />
     <item name="imageView6_start" type="id" />
     <item name="tiltTextView2" type="id" />
+    <item name="gRight" type="id" />
 </resources>
