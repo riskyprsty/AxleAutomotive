@@ -8,11 +8,7 @@
         android:icon="@drawable/ic_settings"
         android:title="Settings" />
     <item
-        android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_profile"
-        android:title="Profile" />
-    <item
-        android:id="@+id/navigation_message"
-        android:icon="@drawable/ic_message"
-        android:title="Message" />
+        android:id="@+id/navigation_maps"
+        android:icon="@drawable/ic_maps"
+        android:title="Maps" />
 </menu>

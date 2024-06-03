@@ -26,11 +26,8 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.navigation_settings) {
                 loadFragment(new SettingsFragment());
                 return true;
-            } else if (item.getItemId() == R.id.navigation_profile) {
-                loadFragment(new ProfileFragment());
-                return true;
-            } else if (item.getItemId() == R.id.navigation_message) {
-                loadFragment(new MessageFragment());
+            } else if (item.getItemId() == R.id.navigation_maps) {
+                loadFragment(new MapsFragment());
                 return true;
             }
             return false;
