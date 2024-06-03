@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment {
         speed.addColoredRange(0, 50, Color.GREEN);
         speed.addColoredRange(50, 75, Color.YELLOW);
         speed.addColoredRange(75, 100, Color.RED);
-        speed.setSpeed(75, 5000, 500);
+        speed.setSpeed(50, 10000, 500);
 
         tiltTextView = view.findViewById(R.id.tiltTextView);
         wheelImageView = view.findViewById(R.id.wheelImageView);
