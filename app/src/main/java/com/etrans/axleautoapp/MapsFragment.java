@@ -4,9 +4,14 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -15,15 +20,11 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
+public class MapsFragment extends Fragment {
 
-    private GoogleMap mMap;
+    private static final String TAG = "MapsFragment";
+    private WebView mapWebView;
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
@@ -31,39 +32,55 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        // Get the SupportMapFragment and request notification when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
+        mapWebView = rootView.findViewById(R.id.mapWebView);
+        WebView.setWebContentsDebuggingEnabled(true);
+
+        // Set WebViewClient to handle page navigation
+        mapWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                Log.d(TAG, "Page loaded: " + url);
+            }
+        });
+
+        mapWebView.setWebChromeClient(new WebChromeClient());
+
+        WebSettings webSettings = mapWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setAllowFileAccess(true);
+        webSettings.setAllowContentAccess(true);
+
+        mapWebView.loadUrl("https://maps.app.goo.gl/F6rgHFXHjpUPtFPc9");
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
+        enableMyLocation();
 
         return rootView;
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        enableMyLocation();
-    }
-
     private void enableMyLocation() {
-        // Check for location permission
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-            // Get last known location and move camera to it
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(requireActivity(), location -> {
                         if (location != null) {
-                            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation, 15));
+                            updateLocationOnMap(location);
+                        } else {
+                            Log.e(TAG, "Location is null");
                         }
-                    });
+                    })
+                    .addOnFailureListener(e -> Log.e(TAG, "Failed to get location", e));
         } else {
-            // Request location permission
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         }
+    }
+
+    private void updateLocationOnMap(Location location) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        Log.d(TAG, "Updating location on map: " + latitude + ", " + longitude);
+        mapWebView.loadUrl("javascript:updateLocation(" + latitude + "," + longitude + ")");
     }
 
     @Override
@@ -72,7 +89,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 enableMyLocation();
             } else {
-                // Permission was denied
+                Log.e(TAG, "Location permission denied");
             }
         }
     }
